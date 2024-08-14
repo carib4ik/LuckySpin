@@ -1,10 +1,12 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BadgeController : MonoBehaviour
 {
-    [SerializeField] private Button _button;
+    public event Action BadgesEmpty;
+    
     [SerializeField] private GameObject _badgePrefab;
     [SerializeField] private TextMeshProUGUI _textMeshPro;
     [SerializeField] private int _badgeQuantity;
@@ -17,12 +19,6 @@ public class BadgeController : MonoBehaviour
     private void Awake()
     {
         _textMeshPro.text = "x" + _badgeQuantity;
-        
-        if (_badgeQuantity > 0)
-        {
-            CreateNewBadge();
-        }
-        
     }
 
     public void SpendBadge()
@@ -30,6 +26,7 @@ public class BadgeController : MonoBehaviour
         if (_badgeQuantity > 0)
         {
             CreateNewBadge();
+            
             _badgeAnimator.SetTrigger(Fly);
             _badgeQuantity--;
             _textMeshPro.text = "x" + _badgeQuantity;
@@ -37,7 +34,7 @@ public class BadgeController : MonoBehaviour
         
         if (_badgeQuantity == 0)
         {
-            _button.interactable = false;
+            BadgesEmpty!.Invoke();
         }
     }
 

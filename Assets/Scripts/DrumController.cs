@@ -1,15 +1,19 @@
+using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class DrumController : MonoBehaviour
 {
-    [SerializeField] private Button _button;
-    [SerializeField] private GameObject _prizeCard;
+    public event Action RotationEnd;
+    public event Action RotationStart;
+    
+    [SerializeField] private float minSpinDuration = 0.3f;
+    [SerializeField] private float maxSpinDuration = 1.5f;
     
     private Animator _spinnerAnimator;
-    
-    private static readonly int Rotate = Animator.StringToHash("rotate");
-    private static readonly int Stop = Animator.StringToHash("stop");
+    private bool _isSpinning;
+    private static readonly int IsSpinning = Animator.StringToHash("isSpinning");
 
     private void Start()
     {
@@ -18,24 +22,29 @@ public class DrumController : MonoBehaviour
 
     public void RotateDrum()
     {
-        var motionStop = Random.Range(20, 100) / 100f;
-        // _animator.SetFloat(Stop, motionStop);
-
-        _spinnerAnimator.SetTrigger(Rotate);
-    }
-
-    public void DisableButton()
-    {
-        _button.interactable = false;
+        // var rotationTime = Random.Range(30, 100) / 100f;
+        // _spinnerAnimator.Play("SpinDrum", 0, rotationTime);
+        if (!_isSpinning)
+        {
+            StartCoroutine(SpinCoroutine());
+        }
     }
     
-    public void ActivateButton()
+    private IEnumerator SpinCoroutine()
     {
-        _button.interactable = true;
-    }
+        // RotationStart!.Invoke();
+        
+        _isSpinning = true;
+        _spinnerAnimator.SetBool(IsSpinning, true);
+        
+        var spinDuration = Random.Range(minSpinDuration, maxSpinDuration);
+        yield return new WaitForSeconds(spinDuration);
 
-    public void ShowPrize()
-    {
-        Instantiate(_prizeCard, transform.parent);
+        _spinnerAnimator.SetBool(IsSpinning, false);
+        _isSpinning = false;
+
+        yield return new WaitForSeconds(1f);
+
+        RotationEnd!.Invoke();
     }
 }

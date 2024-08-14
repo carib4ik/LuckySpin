@@ -1,14 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PrizeController : MonoBehaviour
 {
-    // private void Awake()
-    // {
-    //     _collider = GetComponent<Collider2D>();
-    // }
+    [SerializeField] private CardsAnimationEventHandler[] _prizeCards;
     
-    private void OnTriggerStay(Collider other)
+    private RectTransform _drum;
+    private List<int> _collection = new();
+
+    private void Start()
     {
-        Instantiate(other.transform, transform);
+        _drum = GetComponent<RectTransform>();
+    }
+    
+    public void ShowPrize()
+    {
+        var sector = GetPrizeIndex();
+        _prizeCards[sector].PlayAnimation();
+        _collection.Add(sector);
+    }
+    
+    private int GetPrizeIndex()
+    {
+        var currentRotation = _drum.eulerAngles.z + 22.5f;
+        var prizeIndex = Mathf.FloorToInt(currentRotation / 45f);
+        prizeIndex %= 8;
+        
+        return prizeIndex;
     }
 }

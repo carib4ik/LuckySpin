@@ -7,16 +7,17 @@ public class DrumController : MonoBehaviour
     public event Action RotationEnd;
     public event Action RotationStart;
     
-    [SerializeField] private float _minSpeed = 200f; // Минимальная начальная скорость
-    [SerializeField] private float _maxSpeed = 1000f; // Максимальная начальная скорость
-    [SerializeField] private float _minDuration = 0.3f; // Минимальная длительность вращения
-    [SerializeField] private float _maxDuration = 2f; // Максимальная длительность вращения
+    [SerializeField] private float _minSpeed;
+    [SerializeField] private float _maxSpeed;
+    [SerializeField] private float _minDuration;
+    [SerializeField] private float _maxDuration;
 
     private RectTransform _drum;
-    private float _currentSpeed; // Текущая скорость вращения
-    private float _duration; // Длительность вращения
-    private bool _isSpinning; // Флаг вращения
-    private float _elapsedTime = 0f; // Время прошедшее с начала вращения
+    private float _currentSpeed;
+    private float _duration; 
+    private bool _isSpinning; 
+    private float _elapsedTime;
+    private float _initialSpeed;
 
     private void Awake()
     {
@@ -28,18 +29,19 @@ public class DrumController : MonoBehaviour
         if (_isSpinning)
         {
             _elapsedTime += Time.deltaTime;
-            var t = _elapsedTime / _duration; // Нормализированное время (от 0 до 1)
+            var t = _elapsedTime / _duration;
 
-            // Линейное уменьшение скорости
-            _currentSpeed = Mathf.Lerp(_currentSpeed, 0, t);
+            _currentSpeed = _initialSpeed * Mathf.Exp(-3 * t);
             
-            // Вращаем колесо
-            _drum.Rotate(0, 0, _currentSpeed * Time.deltaTime);
-
+            _drum.Rotate(0, 0, -_currentSpeed * Time.deltaTime);
+            
             if (_elapsedTime >= _duration)
             {
                 _isSpinning = false;
                 _elapsedTime = 0f;
+                _currentSpeed = 0f;
+                
+                RotationEnd?.Invoke();
             }
         }
     }
@@ -48,7 +50,8 @@ public class DrumController : MonoBehaviour
     {
         if (!_isSpinning)
         {
-            _currentSpeed = Random.Range(_minSpeed, _maxSpeed);
+            _initialSpeed = Random.Range(_minSpeed, _maxSpeed);
+            _currentSpeed = _initialSpeed;
             _duration = Random.Range(_minDuration, _maxDuration);
             _isSpinning = true;
         }

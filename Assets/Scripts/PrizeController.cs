@@ -4,7 +4,8 @@ using UnityEngine;
 public class PrizeController : MonoBehaviour
 {
     [SerializeField] private CardsAnimationEventHandler[] _prizeCards;
-    
+
+    private bool _isEnd;
     private RectTransform _drum;
     private List<int> _collection = new();
 

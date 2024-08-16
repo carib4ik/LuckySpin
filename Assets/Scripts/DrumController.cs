@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,43 +7,50 @@ public class DrumController : MonoBehaviour
     public event Action RotationEnd;
     public event Action RotationStart;
     
-    [SerializeField] private float minSpinDuration = 0.3f;
-    [SerializeField] private float maxSpinDuration = 1.5f;
-    
-    private Animator _spinnerAnimator;
-    private bool _isSpinning;
-    private static readonly int IsSpinning = Animator.StringToHash("isSpinning");
+    [SerializeField] private float _minSpeed = 200f; // Минимальная начальная скорость
+    [SerializeField] private float _maxSpeed = 1000f; // Максимальная начальная скорость
+    [SerializeField] private float _minDuration = 0.3f; // Минимальная длительность вращения
+    [SerializeField] private float _maxDuration = 2f; // Максимальная длительность вращения
 
-    private void Start()
+    private RectTransform _drum;
+    private float _currentSpeed; // Текущая скорость вращения
+    private float _duration; // Длительность вращения
+    private bool _isSpinning; // Флаг вращения
+    private float _elapsedTime = 0f; // Время прошедшее с начала вращения
+
+    private void Awake()
     {
-        _spinnerAnimator = GetComponent<Animator>();
+        _drum = GetComponent<RectTransform>();
     }
 
-    public void RotateDrum()
+    private void Update()
     {
-        // var rotationTime = Random.Range(30, 100) / 100f;
-        // _spinnerAnimator.Play("SpinDrum", 0, rotationTime);
-        if (!_isSpinning)
+        if (_isSpinning)
         {
-            StartCoroutine(SpinCoroutine());
+            _elapsedTime += Time.deltaTime;
+            var t = _elapsedTime / _duration; // Нормализированное время (от 0 до 1)
+
+            // Линейное уменьшение скорости
+            _currentSpeed = Mathf.Lerp(_currentSpeed, 0, t);
+            
+            // Вращаем колесо
+            _drum.Rotate(0, 0, _currentSpeed * Time.deltaTime);
+
+            if (_elapsedTime >= _duration)
+            {
+                _isSpinning = false;
+                _elapsedTime = 0f;
+            }
         }
     }
     
-    private IEnumerator SpinCoroutine()
+    public void RotateDrum()
     {
-        // RotationStart!.Invoke();
-        
-        _isSpinning = true;
-        _spinnerAnimator.SetBool(IsSpinning, true);
-        
-        var spinDuration = Random.Range(minSpinDuration, maxSpinDuration);
-        yield return new WaitForSeconds(spinDuration);
-
-        _spinnerAnimator.SetBool(IsSpinning, false);
-        _isSpinning = false;
-
-        yield return new WaitForSeconds(1f);
-
-        RotationEnd!.Invoke();
+        if (!_isSpinning)
+        {
+            _currentSpeed = Random.Range(_minSpeed, _maxSpeed);
+            _duration = Random.Range(_minDuration, _maxDuration);
+            _isSpinning = true;
+        }
     }
 }

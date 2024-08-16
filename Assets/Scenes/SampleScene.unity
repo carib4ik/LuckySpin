@@ -1613,7 +1613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _badgePrefab: {fileID: 1069872353647818046, guid: 5da8c22b1c871664ea137c84ce102d4e, type: 3}
   _textMeshPro: {fileID: 1001047448}
-  _badgeQuantity: 5
+  _badgeQuantity: 3
 --- !u!224 &846707368 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2448326336720195816, guid: f60ca950dd6cad14b8642d7f48fbeaf9, type: 3}
@@ -1645,7 +1645,7 @@ GameObject:
   - component: {fileID: 857989453}
   - component: {fileID: 857989452}
   m_Layer: 5
-  m_Name: Spinner
+  m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1724,7 +1724,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 857989446}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 80db2882a8e0d604e882221b00410372, type: 2}
   m_CullingMode: 0
@@ -1770,8 +1770,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfe0798290862646b8c332366e915f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpinDuration: 0.3
-  maxSpinDuration: 1.5
+  _minSpeed: 200
+  _maxSpeed: 1000
+  _minDuration: 1
+  _maxDuration: 5
 --- !u!1 &886854406
 GameObject:
   m_ObjectHideFlags: 0
@@ -3707,8 +3709,8 @@ RectTransform:
   - {fileID: 2040722681}
   - {fileID: 1174825546}
   - {fileID: 696071217}
-  - {fileID: 114347865}
   - {fileID: 1347503203}
+  - {fileID: 114347865}
   - {fileID: 1703223974}
   - {fileID: 681227592}
   - {fileID: 2025661979}

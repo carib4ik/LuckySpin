@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
         // _drumController.RotationStart += _buttonController.DisableButton;
         // _drumController.RotationEnd += _buttonController.ActivateButton;
         _drumController.RotationEnd += _prizeController.ShowPrize;
+        _badgeController.BadgesEmpty += _chestController.ShowResult;
         _badgeController.BadgesEmpty += _buttonController.DisableButton;
 
         for (var i = 0; i < _cardsAnimationEventHandlers.Length; i++)

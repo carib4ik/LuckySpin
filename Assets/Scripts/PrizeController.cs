@@ -14,7 +14,7 @@ public class PrizeController : MonoBehaviour
         _drum = GetComponent<RectTransform>();
     }
     
-    public void ShowPrize()
+    public void ShowPrizeCard()
     {
         var sector = GetPrizeIndex();
         _prizeCards[sector].PlayAnimation();

@@ -4,8 +4,8 @@ using Random = UnityEngine.Random;
 
 public class DrumController : MonoBehaviour
 {
-    public event Action RotationEnd;
-    public event Action RotationStart;
+    public event Action DrumRotationEnd;
+    // public event Action DrumRotationStart;
     
     [SerializeField] private float _minSpeed;
     [SerializeField] private float _maxSpeed;
@@ -41,7 +41,7 @@ public class DrumController : MonoBehaviour
                 _elapsedTime = 0f;
                 _currentSpeed = 0f;
                 
-                RotationEnd?.Invoke();
+                DrumRotationEnd?.Invoke();
             }
         }
     }

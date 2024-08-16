@@ -7,20 +7,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BadgeController _badgeController;
     [SerializeField] private PrizeController _prizeController;
     [SerializeField] private ChestController _chestController;
+    [SerializeField] private DimmerController _dimmerController;
+
     [SerializeField] private CardsAnimationEventHandler[] _cardsAnimationEventHandlers;
 
     private void Start()
     {
-        // _drumController.RotationStart += _buttonController.DisableButton;
-        // _drumController.RotationEnd += _buttonController.ActivateButton;
-        _drumController.RotationEnd += _prizeController.ShowPrize;
+        _drumController.DrumRotationEnd += _prizeController.ShowPrizeCard;
+        _drumController.DrumRotationEnd += _dimmerController.Darken;
         _badgeController.BadgesEmpty += _buttonController.DisableButton;
         _badgeController.BadgesEmpty += _chestController.SetEnd;
+        
+        _chestController.StartChestMovingAnimation += _dimmerController.Darken;
 
-        for (var i = 0; i < _cardsAnimationEventHandlers.Length; i++)
+        foreach (var card in _cardsAnimationEventHandlers)
         {
-            if (i == 2) continue;
-            _cardsAnimationEventHandlers[i].AnimationEnd += _chestController.AnimateChest;
+            card.CardAnimationEnd += _chestController.AnimateChest;
+            card.CardAnimationEnd += _dimmerController.Lighten;
         }
     }
 
@@ -28,5 +31,4 @@ public class GameManager : MonoBehaviour
     {
         UnityEditor.EditorApplication.isPlaying = false;
     }
-    
 }

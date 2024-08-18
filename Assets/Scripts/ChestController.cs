@@ -6,18 +6,22 @@ public class ChestController : MonoBehaviour
 {
     public event Action StartChestMovingAnimation;
     
+    [SerializeField] private Button _claimButton;
+    [SerializeField] private GameObject _coinsScore;
+    
     private Animator _chestAnimator;
-    private Button _button;
+    private Button _chestButton;
     private bool _isEnd;
     
     private static readonly int GetPrize = Animator.StringToHash("getPrize");
     private static readonly int Result = Animator.StringToHash("showResult");
     private static readonly int Shake = Animator.StringToHash("shake");
+    private static readonly int Hide = Animator.StringToHash("hide");
 
     private void Awake()
     {
         _chestAnimator = GetComponent<Animator>();
-        _button = GetComponent<Button>();
+        _chestButton = GetComponent<Button>();
     }
 
     public void AnimateChest()
@@ -38,7 +42,7 @@ public class ChestController : MonoBehaviour
     private void ShakeChest()
     {
         _chestAnimator.SetTrigger(Shake);
-        _button.interactable = true;
+        _chestButton.interactable = true;
     }
 
     private void PulseOnce()
@@ -54,7 +58,14 @@ public class ChestController : MonoBehaviour
     public void ShowCollectedPrizes()
     {
         _chestAnimator.SetTrigger(Result);
-        _button.interactable = false;
+        _chestButton.interactable = false;
+        _claimButton.gameObject.SetActive(true);
+        _coinsScore.SetActive(true);
+    }
+
+    public void HideChest()
+    {
+        _chestAnimator.SetTrigger(Hide);
     }
     
 }

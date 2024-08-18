@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PrizeController _prizeController;
     [SerializeField] private ChestController _chestController;
     [SerializeField] private DimmerController _dimmerController;
+    [SerializeField] private ScoreController _scoreController;
 
     [SerializeField] private CardsAnimationEventHandler[] _cardsAnimationEventHandlers;
 
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
         _drumController.DrumRotationEnd += _dimmerController.Darken;
         _badgeController.BadgesEmpty += _buttonController.DisableButton;
         _badgeController.BadgesEmpty += _chestController.SetEnd;
-        
+        _chestController.StartChestMovingAnimation += _scoreController.CalculateScore;
         _chestController.StartChestMovingAnimation += _dimmerController.Darken;
 
         foreach (var card in _cardsAnimationEventHandlers)

@@ -12,6 +12,7 @@ public class ChestController : MonoBehaviour
     private Animator _chestAnimator;
     private Button _chestButton;
     private bool _isEnd;
+    private AudioSource _audioSource;
     
     private static readonly int GetPrize = Animator.StringToHash("getPrize");
     private static readonly int Result = Animator.StringToHash("showResult");
@@ -22,6 +23,7 @@ public class ChestController : MonoBehaviour
     {
         _chestAnimator = GetComponent<Animator>();
         _chestButton = GetComponent<Button>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void AnimateChest()
@@ -61,6 +63,9 @@ public class ChestController : MonoBehaviour
         _chestButton.interactable = false;
         _claimButton.gameObject.SetActive(true);
         _coinsScore.SetActive(true);
+
+        _audioSource.time = 0.6f;
+        _audioSource.Play();
     }
 
     public void HideChest()

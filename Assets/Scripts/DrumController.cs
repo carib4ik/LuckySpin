@@ -18,10 +18,12 @@ public class DrumController : MonoBehaviour
     private bool _isSpinning; 
     private float _elapsedTime;
     private float _initialSpeed;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
         _drum = GetComponent<RectTransform>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -33,6 +35,8 @@ public class DrumController : MonoBehaviour
 
             _currentSpeed = _initialSpeed * Mathf.Exp(-3 * t);
             
+            _audioSource.pitch = Mathf.Lerp(1f, 0.1f, t);
+            
             _drum.Rotate(0, 0, -_currentSpeed * Time.deltaTime);
             
             if (_elapsedTime >= _duration)
@@ -40,6 +44,9 @@ public class DrumController : MonoBehaviour
                 _isSpinning = false;
                 _elapsedTime = 0f;
                 _currentSpeed = 0f;
+                
+                _audioSource.pitch = 1f;
+                _audioSource.Stop();
                 
                 DrumRotationEnd?.Invoke();
             }
@@ -54,6 +61,8 @@ public class DrumController : MonoBehaviour
             _currentSpeed = _initialSpeed;
             _duration = Random.Range(_minDuration, _maxDuration);
             _isSpinning = true;
+            
+            _audioSource.Play();
         }
     }
 }

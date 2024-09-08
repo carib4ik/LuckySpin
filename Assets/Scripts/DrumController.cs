@@ -11,6 +11,7 @@ public class DrumController : MonoBehaviour
     [SerializeField] private float _maxSpeed;
     [SerializeField] private float _minDuration;
     [SerializeField] private float _maxDuration;
+    [SerializeField] private ParticleSystem _aura;
 
     private RectTransform _drum;
     private float _currentSpeed;
@@ -45,6 +46,8 @@ public class DrumController : MonoBehaviour
                 _elapsedTime = 0f;
                 _currentSpeed = 0f;
                 
+                _aura.Stop();
+
                 _audioSource.pitch = 1f;
                 _audioSource.Stop();
                 
@@ -61,6 +64,8 @@ public class DrumController : MonoBehaviour
             _currentSpeed = _initialSpeed;
             _duration = Random.Range(_minDuration, _maxDuration);
             _isSpinning = true;
+            
+            _aura.Play();
             
             _audioSource.Play();
         }
